@@ -376,6 +376,49 @@ audio { display: none; }
 .song-item.active .song-tag { color: var(--sage-light); }
 .yt-badge { font-size: 9px; background: rgba(255,0,0,0.15); color: #ff6b6b; padding: 2px 7px; border-radius: 6px; border: 1px solid rgba(255,0,0,0.2); margin-left: 4px; }
 .stream-note { padding: 14px 24px; border-top: 1px solid rgba(255,255,255,0.06); font-size: 11px; color: rgba(255,255,255,0.2); line-height: 1.5; text-align: center; }
+
+/* DIGITAL PRODUCTS PAGE */
+.shop-page { padding: 36px 40px; max-width: 900px; }
+.shop-hero { margin-bottom: 32px; }
+.shop-tag { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--sage); margin-bottom: 8px; }
+.shop-title { font-family: var(--font-display); font-size: 30px; font-weight: 300; color: var(--bark); margin-bottom: 8px; }
+.shop-title em { color: var(--sage-dark); font-style: italic; }
+.shop-sub { font-size: 13.5px; color: var(--fog); line-height: 1.6; max-width: 540px; }
+.shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 24px; }
+.shop-card { background: white; border-radius: 20px; border: 1px solid var(--mist); overflow: hidden; box-shadow: 0 4px 20px rgba(61,46,34,0.07); display: flex; flex-direction: column; transition: transform 0.25s, box-shadow 0.25s; }
+.shop-card:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(61,46,34,0.12); }
+.shop-card-banner { height: 8px; }
+.shop-card-banner.green { background: linear-gradient(90deg, var(--sage-dark), var(--sage-light)); }
+.shop-card-banner.gold { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+.shop-card-banner.blush { background: linear-gradient(90deg, var(--blush-deep), var(--blush)); }
+.shop-card-body { padding: 26px 24px; flex: 1; display: flex; flex-direction: column; }
+.shop-card-emoji { font-size: 32px; margin-bottom: 14px; display: block; }
+.shop-card-label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--sage); margin-bottom: 6px; }
+.shop-card-name { font-family: var(--font-display); font-size: 22px; font-weight: 400; color: var(--bark); margin-bottom: 8px; line-height: 1.2; }
+.shop-card-desc { font-size: 13px; color: var(--fog); line-height: 1.65; flex: 1; margin-bottom: 20px; }
+.shop-card-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.shop-price { font-family: var(--font-display); font-size: 26px; font-weight: 600; color: var(--sage-dark); }
+.shop-price span { font-size: 12px; color: var(--fog); font-family: var(--font-body); font-weight: 400; }
+.shop-btn { padding: 11px 22px; border-radius: 12px; font-size: 13px; font-weight: 500; font-family: var(--font-body); cursor: pointer; border: none; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+.shop-btn.primary { background: linear-gradient(135deg, var(--sage-dark), var(--sage)); color: white; box-shadow: 0 4px 14px rgba(74,107,78,0.25); }
+.shop-btn.primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(74,107,78,0.35); }
+.shop-btn.outline { background: white; color: var(--sage-dark); border: 1.5px solid var(--sage-light); }
+.shop-btn.outline:hover { background: rgba(122,158,126,0.06); border-color: var(--sage); }
+.shop-btn.gold-btn { background: linear-gradient(135deg, var(--gold), #b8942a); color: white; box-shadow: 0 4px 14px rgba(201,169,110,0.3); }
+.shop-btn.gold-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(201,169,110,0.4); }
+.shop-browse-row { display: flex; align-items: center; justify-content: center; padding: 20px 24px; background: white; border-radius: 16px; border: 1.5px dashed var(--sage-light); gap: 16px; flex-wrap: wrap; }
+.shop-browse-text { font-size: 13.5px; color: var(--fog); }
+.shop-browse-text strong { color: var(--bark); }
+.tip-card { background: linear-gradient(135deg, rgba(232,196,184,0.3), rgba(201,137,111,0.1)); border: 1.5px solid var(--blush); border-radius: 20px; padding: 28px 24px; text-align: center; margin-top: 20px; }
+.tip-card-title { font-family: var(--font-display); font-size: 20px; font-weight: 300; color: var(--bark); margin-bottom: 6px; }
+.tip-card-sub { font-size: 13px; color: var(--fog); margin-bottom: 20px; line-height: 1.6; }
+.tip-amounts { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.tip-btn { padding: 10px 20px; border-radius: 20px; border: 1.5px solid var(--blush-deep); background: white; color: var(--blush-deep); font-size: 13px; font-weight: 500; font-family: var(--font-body); cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
+.tip-btn:hover { background: var(--blush-deep); color: white; transform: translateY(-1px); }
+@media (max-width: 768px) {
+  .shop-page { padding: 20px 16px; }
+  .shop-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -411,7 +454,7 @@ audio { display: none; }
     <div class="nav-item" onclick="noopNav(this)">
       <span class="nav-icon">📈</span> Brand Analytics
     </div>
-    <div class="nav-item" onclick="noopNav(this)">
+    <div class="nav-item" id="nav-products" onclick="showPage('products')">
       <span class="nav-icon">💎</span> Digital Products
     </div>
     <div class="nav-item" onclick="noopNav(this)">
@@ -634,6 +677,67 @@ audio { display: none; }
     </div>
   </div>
 
+  <!-- DIGITAL PRODUCTS -->
+  <div id="page-products" class="page">
+    <div class="shop-page">
+      <div class="shop-hero">
+        <div class="shop-tag">💎 Emy J · Our Healing Sanctuary</div>
+        <div class="shop-title">Digital <em>Products</em></div>
+        <div class="shop-sub">Everything created here comes from lived experience — books, memberships, and tools to support your healing journey.</div>
+      </div>
+
+      <div class="shop-grid">
+        <!-- Ebook -->
+        <div class="shop-card">
+          <div class="shop-card-banner green"></div>
+          <div class="shop-card-body">
+            <span class="shop-card-emoji">📖</span>
+            <div class="shop-card-label">E-Book</div>
+            <div class="shop-card-name">Hidden Wounds</div>
+            <div class="shop-card-desc">A raw, honest guide to recognising the invisible scars of emotional abuse — and beginning to heal them. Written from the heart by Emy J.</div>
+            <div class="shop-card-footer">
+              <div class="shop-price">$17<span> one-time</span></div>
+              <a class="shop-btn primary" href="https://lovver75.gumroad.com/l/fijqxo" target="_blank">Get the Book →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Membership -->
+        <div class="shop-card">
+          <div class="shop-card-banner gold"></div>
+          <div class="shop-card-body">
+            <span class="shop-card-emoji">🌿</span>
+            <div class="shop-card-label">Membership</div>
+            <div class="shop-card-name">Sanctuary Membership</div>
+            <div class="shop-card-desc">Join our healing community on Patreon. Access exclusive content, music, breathwork, monthly voice notes from Emy J, and the full creator toolkit.</div>
+            <div class="shop-card-footer">
+              <div class="shop-price">$3<span>/mo+</span></div>
+              <a class="shop-btn gold-btn" href="https://www.patreon.com/c/EmyJ" target="_blank">Join on Patreon →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Browse All -->
+      <div class="shop-browse-row">
+        <div class="shop-browse-text"><strong>Looking for more?</strong> See all products and bundles in the Gumroad shop.</div>
+        <a class="shop-btn outline" href="https://lovver75.gumroad.com" target="_blank">🛍 Browse All Products</a>
+      </div>
+
+      <!-- Tip Jar -->
+      <div class="tip-card">
+        <div class="tip-card-title">💛 Leave a Tip</div>
+        <div class="tip-card-sub">If this sanctuary has helped you, a small tip means the world and keeps this space alive. Thank you so much.</div>
+        <div class="tip-amounts">
+          <a class="tip-btn" href="https://lovver75.gumroad.com" target="_blank">☕ $3 Coffee</a>
+          <a class="tip-btn" href="https://lovver75.gumroad.com" target="_blank">🌸 $5 Tip</a>
+          <a class="tip-btn" href="https://lovver75.gumroad.com" target="_blank">✨ $10 Love</a>
+          <a class="tip-btn" href="https://lovver75.gumroad.com" target="_blank">💜 Choose Amount</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- AI IMAGE STUDIO -->
   <div id="page-image" class="page">
     <div class="lab-page">
@@ -725,7 +829,7 @@ audio { display: none; }
     <p class="gate-sub">This room is for Sanctuary Members. Choose a tier below to unlock the full healing creator experience.</p>
 
     <div class="gate-tiers">
-      <a class="gate-tier" href="https://patreon.com/EmyJ" target="_blank">
+      <a class="gate-tier" href="https://www.patreon.com/c/EmyJ" target="_blank">
         <div class="tier-left">
           <span class="tier-emoji">🌱</span>
           <div class="tier-name">Sanctuary Friend · Patreon</div>
@@ -741,7 +845,7 @@ audio { display: none; }
         </div>
         <div class="tier-price">$9<span>/mo</span></div>
       </a>
-      <a class="gate-tier" href="https://patreon.com/EmyJ" target="_blank">
+      <a class="gate-tier" href="https://www.patreon.com/c/EmyJ" target="_blank">
         <div class="tier-left">
           <span class="tier-emoji">✨</span>
           <div class="tier-name">VIP Healer · Patreon</div>
@@ -841,10 +945,11 @@ function showPage(id) {
   const navEl = document.getElementById('nav-' + id);
   if (navEl) navEl.classList.add('active');
   const titles = {
-    home:    'Sanctuary <span>Strategist</span>',
-    music:   '🎵 Music <span>Sanctuary</span>',
-    creator: '✍️ Creator <span>Lab</span>',
-    image:   '🖼 AI Image <span>Studio</span>'
+    home:     'Sanctuary <span>Strategist</span>',
+    music:    '🎵 Music <span>Sanctuary</span>',
+    creator:  '✍️ Creator <span>Lab</span>',
+    image:    '🖼 AI Image <span>Studio</span>',
+    products: '💎 Digital <span>Products</span>'
   };
   document.getElementById('topbarTitle').innerHTML = titles[id] || id;
   document.getElementById('modePill').style.display = id === 'home' ? 'flex' : 'none';
