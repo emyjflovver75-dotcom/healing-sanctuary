@@ -579,7 +579,7 @@ audio { display: none; }
         <div class="song-info">
           <div class="song-mood" id="songMood">Grounding & Calm</div>
           <div class="song-title" id="songTitle">Keep Your Heart</div>
-          <div class="song-artist">Emy J · Our Healing Sanctuary</div>
+          <div class="song-artist">Our Healing Sanctuary</div>
         </div>
         <div class="progress-wrap" id="progressWrap">
           <div class="progress-times">
@@ -606,7 +606,7 @@ audio { display: none; }
       </div>
       <div class="playlist">
         <div class="playlist-header">
-          <div class="playlist-label">✦ Original music by Emy J</div>
+          <div class="playlist-label">✦ Original music by Our Healing Sanctuary</div>
           <div class="playlist-title">Your Sanctuary Playlist</div>
         </div>
         <div class="mood-filters">
@@ -618,7 +618,7 @@ audio { display: none; }
           <button class="mood-btn" onclick="filterMood('strength',this)">💪 Strength</button>
         </div>
         <div class="song-list" id="songList"></div>
-        <div class="stream-note">🌿 Original music by Emy J<br>Our Healing Sanctuary · All rights reserved</div>
+        <div class="stream-note">🌿 Our Healing Sanctuary · All rights reserved</div>
       </div>
     </div>
   </div>
@@ -681,7 +681,7 @@ audio { display: none; }
   <div id="page-products" class="page">
     <div class="shop-page">
       <div class="shop-hero">
-        <div class="shop-tag">💎 Emy J · Our Healing Sanctuary</div>
+        <div class="shop-tag">💎 Our Healing Sanctuary</div>
         <div class="shop-title">Digital <em>Products</em></div>
         <div class="shop-sub">Everything created here comes from lived experience — books, memberships, and tools to support your healing journey.</div>
       </div>
@@ -694,7 +694,7 @@ audio { display: none; }
             <span class="shop-card-emoji">📖</span>
             <div class="shop-card-label">E-Book</div>
             <div class="shop-card-name">Hidden Wounds</div>
-            <div class="shop-card-desc">A raw, honest guide to recognising the invisible scars of emotional abuse — and beginning to heal them. Written from the heart by Emy J.</div>
+            <div class="shop-card-desc">A raw, honest guide to recognising the invisible scars of emotional abuse — and beginning to heal them.</div>
             <div class="shop-card-footer">
               <div class="shop-price">$17<span> one-time</span></div>
               <a class="shop-btn primary" href="https://lovver75.gumroad.com/l/fijqxo" target="_blank">Get the Book →</a>
@@ -709,10 +709,10 @@ audio { display: none; }
             <span class="shop-card-emoji">🌿</span>
             <div class="shop-card-label">Membership</div>
             <div class="shop-card-name">Sanctuary Membership</div>
-            <div class="shop-card-desc">Join our healing community on Patreon. Access exclusive content, music, breathwork, monthly voice notes from Emy J, and the full creator toolkit.</div>
+            <div class="shop-card-desc">Join our healing community on Patreon. Access exclusive content, music, breathwork, monthly exclusive audio from the Sanctuary, and the full creator toolkit.</div>
             <div class="shop-card-footer">
               <div class="shop-price">$9<span>/mo</span></div>
-              <a class="shop-btn gold-btn" href="https://patreon.com/EmyJ" target="_blank">Join on Patreon →</a>
+              <a class="shop-btn gold-btn" href="https://www.patreon.com/c/ourhealingsanctuary" target="_blank">Join on Patreon →</a>
             </div>
           </div>
         </div>
@@ -729,7 +729,7 @@ audio { display: none; }
         <div class="tip-card-title">🌿 Support the Sanctuary</div>
         <div class="tip-card-sub">If this space has helped you heal, consider joining on Patreon. Your support keeps the sanctuary growing — and gives you access to exclusive content, music, and more.</div>
         <div class="tip-amounts">
-          <a class="tip-btn" href="https://www.patreon.com/c/EmyJ" target="_blank">Join on Patreon →</a>
+          <a class="tip-btn" href="https://www.patreon.com/c/ourhealingsanctuary" target="_blank">Join on Patreon →</a>
         </div>
       </div>
     </div>
@@ -826,7 +826,7 @@ audio { display: none; }
     <p class="gate-sub">This room is for Sanctuary Members. Choose a tier below to unlock the full healing creator experience.</p>
 
     <div class="gate-tiers">
-      <a class="gate-tier featured" href="https://www.patreon.com/c/EmyJ" target="_blank">
+      <a class="gate-tier featured" href="https://www.patreon.com/c/ourhealingsanctuary" target="_blank">
         <div class="tier-left">
           <span class="tier-emoji">🌿</span>
           <div class="tier-name">Founding Member ✦ Most Popular</div>
@@ -834,11 +834,11 @@ audio { display: none; }
         </div>
         <div class="tier-price">$9<span>/mo</span></div>
       </a>
-      <a class="gate-tier" href="https://www.patreon.com/c/EmyJ" target="_blank">
+      <a class="gate-tier" href="https://www.patreon.com/c/ourhealingsanctuary" target="_blank">
         <div class="tier-left">
           <span class="tier-emoji">✨</span>
           <div class="tier-name">VIP Healer · Patreon</div>
-          <div class="tier-perks">For those who want to go a little deeper. Monthly voice note from Emy J, first access to new features, private community chat.</div>
+          <div class="tier-perks">For those who want to go a little deeper. Monthly exclusive audio from the Sanctuary, first access to new features, private community chat.</div>
         </div>
         <div class="tier-price">$19<span>/mo</span></div>
       </a>
@@ -982,7 +982,7 @@ async function generateContent() {
   btnText.textContent = '✦ Generating…';
   document.getElementById('creatorOutput').innerHTML = '<span class="lab-output-empty">Writing your content…</span>';
 
-  const prompt = `You are the Sanctuary Strategist, a trauma-informed healing content creator for "Our Healing Sanctuary" by Emy J.
+  const prompt = `You are the Sanctuary Strategist, a trauma-informed healing content creator for "Our Healing Sanctuary".
 
 Create a ${selectedType} with a ${selectedTone} tone based on this healing topic/story:
 "${topic}"
