@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Genet's Kitchen Assistant — by EmyJ Magic</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:  #1a7a3a;
+      --green-light: #25a050;
+      --yellow: #f0c030;
+      --yellow-dark: #c8a020;
+      --red:    #c0201a;
+      --red-light: #e03025;
+      --bg:     #0d1a0f;
+      --bg2:    #152018;
+      --bg3:    #1c2a1e;
+      --border: #2a4030;
+      --text:   #e8f5ec;
+      --muted:  #6a9a78;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ---- HEADER ---- */
+    header {
+      background: linear-gradient(135deg, #0d1a0f, #152a18);
+      padding: 0;
+      border-bottom: 4px solid transparent;
+      border-image: linear-gradient(to right, var(--green), var(--yellow), var(--red)) 1;
+    }
+
+    .header-flag {
+      height: 5px;
+      background: linear-gradient(to right,
+        var(--green) 33.3%,
+        var(--yellow) 33.3% 66.6%,
+        var(--red) 66.6%);
+    }
+
+    .header-content {
+      padding: 24px 20px 20px;
+      text-align: center;
+    }
+
+    .brand-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      color: var(--yellow);
+      background: rgba(240,192,48,0.1);
+      border: 1px solid rgba(240,192,48,0.3);
+      border-radius: 20px;
+      padding: 3px 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    header h1 {
+      font-size: 1.9rem;
+      color: #ffffff;
+      letter-spacing: 1px;
+    }
+
+    header h1 span.g { color: var(--green-light); }
+    header h1 span.y { color: var(--yellow); }
+    header h1 span.r { color: var(--red-light); }
+
+    header p {
+      color: var(--muted);
+      margin-top: 6px;
+      font-size: 0.88rem;
+    }
+
+    /* ---- API BAR ---- */
+    .api-bar {
+      background: var(--bg2);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .api-bar label { color: var(--muted); font-size: 0.82rem; white-space: nowrap; }
+
+    .api-bar input {
+      flex: 1;
+      min-width: 200px;
+      padding: 7px 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 0.82rem;
+    }
+
+    .api-bar button {
+      padding: 7px 16px;
+      background: var(--green);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.82rem;
+    }
+
+    .api-status { font-size: 0.78rem; color: #6acf8a; }
+
+    /* ---- TABS ---- */
+    .tabs {
+      display: flex;
+      background: var(--bg2);
+      border-bottom: 2px solid var(--border);
+      overflow-x: auto;
+    }
+
+    .tab {
+      padding: 13px 18px;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 0.88rem;
+      white-space: nowrap;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .tab:hover { color: var(--yellow); }
+    .tab.active { color: var(--yellow); border-bottom-color: var(--yellow); background: var(--bg); }
+
+    /* ---- LAYOUT ---- */
+    .container { max-width: 760px; margin: 0 auto; padding: 28px 18px; }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .card h2 { color: var(--yellow); margin-bottom: 5px; font-size: 1.1rem; }
+    .card p.desc { color: var(--muted); font-size: 0.83rem; margin-bottom: 16px; }
+
+    label {
+      display: block;
+      color: var(--green-light);
+      font-size: 0.82rem;
+      margin-bottom: 5px;
+      margin-top: 14px;
+    }
+
+    input[type="text"], input[type="date"], textarea, select {
+      width: 100%;
+      padding: 10px 13px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-family: inherit;
+      resize: vertical;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--green);
+    }
+
+    select option { background: var(--bg2); }
+
+    /* ---- DISH TAGS ---- */
+    .quick-dishes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+
+    .dish-tag {
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+    }
+
+    .dish-tag.green  { background: rgba(26,122,58,0.2);  color: var(--green-light); border-color: var(--green); }
+    .dish-tag.yellow { background: rgba(240,192,48,0.15); color: var(--yellow);      border-color: var(--yellow-dark); }
+    .dish-tag.red    { background: rgba(192,32,26,0.2);   color: #e06060;            border-color: var(--red); }
+
+    .dish-tag.green:hover  { background: var(--green);  color: #fff; }
+    .dish-tag.yellow:hover { background: var(--yellow); color: #111; }
+    .dish-tag.red:hover    { background: var(--red);    color: #fff; }
+
+    /* ---- BUTTONS ---- */
+    .btn-generate {
+      width: 100%;
+      margin-top: 18px;
+      padding: 13px;
+      background: linear-gradient(135deg, var(--green), var(--green-light));
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: opacity 0.2s;
+    }
+
+    .btn-generate:hover { opacity: 0.88; }
+    .btn-generate:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .platform-toggle { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+
+    .platform-btn {
+      padding: 7px 16px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--bg);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 0.83rem;
+      transition: all 0.2s;
+    }
+
+    .platform-btn.active { background: var(--green); color: #fff; border-color: var(--green); font-weight: bold; }
+
+    /* ---- OUTPUT ---- */
+    .output-box {
+      margin-top: 20px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+      display: none;
+    }
+
+    .output-box.visible { display: block; }
+
+    .output-box h3 {
+      color: var(--green-light);
+      font-size: 0.82rem;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .output-text {
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 0.93rem;
+      white-space: pre-wrap;
+    }
+
+    .btn-copy {
+      margin-top: 12px;
+      padding: 7px 18px;
+      background: transparent;
+      border: 1px solid var(--green);
+      border-radius: 6px;
+      color: var(--green-light);
+      cursor: pointer;
+      font-size: 0.83rem;
+      transition: all 0.2s;
+    }
+
+    .btn-copy:hover { background: var(--green); color: #fff; }
+    .copied { color: var(--yellow) !important; border-color: var(--yellow) !important; }
+
+    /* ---- LOADING ---- */
+    .loading { display: none; text-align: center; padding: 20px; color: var(--green-light); }
+    .loading.visible { display: block; }
+
+    .spinner {
+      display: inline-block;
+      width: 22px; height: 22px;
+      border: 3px solid var(--border);
+      border-top-color: var(--green-light);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ---- TIP ---- */
+    .tip {
+      background: #0d1a0f;
+      border-left: 3px solid var(--yellow);
+      padding: 9px 13px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
+    /* ---- CALENDAR ---- */
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .cal-day-header {
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--muted);
+      padding: 4px 0;
+      text-transform: uppercase;
+    }
+
+    .cal-day {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 6px;
+      min-height: 70px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      position: relative;
+    }
+
+    .cal-day:hover { border-color: var(--green); }
+    .cal-day.has-post { border-color: var(--yellow); }
+
+    .cal-day-num {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .cal-post-preview {
+      font-size: 0.68rem;
+      color: var(--yellow);
+      line-height: 1.3;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+
+    .week-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .week-nav button {
+      padding: 6px 14px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .week-nav button:hover { border-color: var(--green); color: var(--green-light); }
+
+    .week-nav span { color: var(--yellow); font-weight: bold; font-size: 0.9rem; }
+
+    .schedule-form {
+      background: var(--bg);
+      border: 1px solid var(--green);
+      border-radius: 10px;
+      padding: 16px;
+      margin-top: 16px;
+      display: none;
+    }
+
+    .schedule-form.visible { display: block; }
+    .schedule-form h4 { color: var(--yellow); margin-bottom: 12px; font-size: 0.9rem; }
+
+    .btn-small {
+      padding: 7px 14px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: bold;
+      margin-top: 10px;
+      margin-right: 6px;
+    }
+
+    .btn-save { background: var(--green); color: #fff; }
+    .btn-delete { background: var(--red); color: #fff; }
+    .btn-generate-cal {
+      background: var(--yellow);
+      color: #111;
+      padding: 7px 14px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    /* ---- FOOTER ---- */
+    footer {
+      text-align: center;
+      padding: 24px 20px;
+      border-top: 1px solid var(--border);
+      margin-top: 10px;
+    }
+
+    .footer-flag {
+      height: 3px;
+      background: linear-gradient(to right,
+        var(--green) 33.3%,
+        var(--yellow) 33.3% 66.6%,
+        var(--red) 66.6%);
+      margin-bottom: 14px;
+    }
+
+    footer .powered {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    footer .brand {
+      color: var(--yellow);
+      font-weight: bold;
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--green-light);
+      text-decoration: none;
+      font-size: 0.78rem;
+    }
+
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 500px) {
+      header h1 { font-size: 1.4rem; }
+      .calendar-grid { grid-template-columns: repeat(7, 1fr); gap: 3px; }
+      .cal-day { min-height: 55px; padding: 5px 3px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ACCESS GATE -->
+<div id="accessGate" style="
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#0d1a0f;
+  z-index:9999;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:30px;
+">
+  <div style="text-align:center; max-width:340px; width:100%;">
+    <div style="height:5px; background:linear-gradient(to right,#1a7a3a,#f0c030,#c0201a); border-radius:3px; margin-bottom:30px;"></div>
+    <div style="font-size:0.75rem; color:#f0c030; letter-spacing:3px; text-transform:uppercase; margin-bottom:12px;">✦ EmyJ Magic</div>
+    <div style="font-size:2rem; margin-bottom:6px;">🌿</div>
+    <h2 style="color:#ffffff; font-size:1.4rem; margin-bottom:6px;">Genet's Kitchen Assistant</h2>
+    <p style="color:#6a9a78; font-size:0.85rem; margin-bottom:28px;">Enter your access code to continue</p>
+    <input
+      type="password"
+      id="accessInput"
+      placeholder="Access code..."
+      onkeydown="if(event.key==='Enter') checkAccess()"
+      style="
+        width:100%;
+        padding:13px 16px;
+        background:#152018;
+        border:1px solid #2a4030;
+        border-radius:10px;
+        color:#e8f5ec;
+        font-size:1rem;
+        text-align:center;
+        letter-spacing:3px;
+        margin-bottom:12px;
+      "
+    />
+    <button onclick="checkAccess()" style="
+      width:100%;
+      padding:13px;
+      background:linear-gradient(135deg,#1a7a3a,#25a050);
+      color:#fff;
+      border:none;
+      border-radius:10px;
+      font-size:1rem;
+      font-weight:bold;
+      cursor:pointer;
+      letter-spacing:1px;
+    ">Enter</button>
+    <div id="accessError" style="color:#e03025; font-size:0.82rem; margin-top:10px; display:none;">
+      Incorrect code. Please try again.
+    </div>
+    <div style="height:5px; background:linear-gradient(to right,#1a7a3a,#f0c030,#c0201a); border-radius:3px; margin-top:30px;"></div>
+  </div>
+</div>
+
+<!-- MAIN APP (hidden until access granted) -->
+<div id="mainApp" style="display:none;">
+
+<!-- FLAG STRIPE -->
+<div class="header-flag"></div>
+
+<header>
+  <div class="header-content">
+    <div class="brand-badge">✦ EmyJ Magic</div>
+    <h1>🌿 <span class="g">Gen</span><span class="y">et'</span><span class="r">s</span> Kitchen Assistant</h1>
+    <p>Ethiopian Vegetarian • Smart Content Tool</p>
+  </div>
+</header>
+
+<!-- API Key -->
+<div class="api-bar">
+  <label>Claude API Key:</label>
+  <input type="password" id="apiKeyInput" placeholder="sk-ant-..." />
+  <button onclick="saveKey()">Save</button>
+  <span class="api-status" id="apiStatus"></span>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active"  onclick="switchTab('menu')">📋 Menu</div>
+  <div class="tab"         onclick="switchTab('weekly')">📅 Weekly Post</div>
+  <div class="tab"         onclick="switchTab('special')">✨ Daily Special</div>
+  <div class="tab"         onclick="switchTab('image')">🖼️ Image Prompt</div>
+  <div class="tab"         onclick="switchTab('calendar')">🗓️ Scheduler</div>
+</div>
+
+<div class="container">
+
+  <!-- ===== MENU DESCRIPTION ===== -->
+  <div id="panel-menu" class="panel active">
+    <div class="card">
+      <h2>📋 Menu Description Writer</h2>
+      <p class="desc">Write a beautiful, appetizing description for any dish — perfect for printed or digital menus.</p>
+
+      <label>Dish Name</label>
+      <input type="text" id="m-dish" placeholder="e.g. Gomen Wat" />
+
+      <label>Genet's Signatures — click to fill:</label>
+      <div class="quick-dishes">
+        <span class="dish-tag green"  onclick="fillDish('menu','Gomen Wat','Collard greens, onion, garlic, ginger, Ethiopian spices','Earthy and hearty')">🟢 Gomen Wat</span>
+        <span class="dish-tag yellow" onclick="fillDish('menu','Atakilt Wat','Cabbage, potato, carrot, turmeric, cumin','Mild and comforting')">🟡 Atakilt Wat</span>
+        <span class="dish-tag red"    onclick="fillDish('menu','Misser Wat','Red lentils, berbere spice, onion, tomato','Spicy and bold')">🔴 Misser Wat</span>
+      </div>
+
+      <label>Main Ingredients</label>
+      <input type="text" id="m-ingredients" placeholder="e.g. Collard greens, onion, garlic, Ethiopian spices" />
+
+      <label>Dish Character</label>
+      <input type="text" id="m-character" placeholder="e.g. Earthy and hearty / Mild and comforting / Spicy and bold" />
+
+      <label>Tone</label>
+      <select id="m-tone">
+        <option value="warm and inviting">Warm & Inviting</option>
+        <option value="elegant and refined">Elegant & Refined</option>
+        <option value="casual and friendly">Casual & Friendly</option>
+        <option value="poetic and rich">Poetic & Rich</option>
+      </select>
+
+      <button class="btn-generate" onclick="generate('menu')">✦ Generate Menu Description</button>
+      <div class="loading" id="loading-menu"><span class="spinner"></span> Writing your description...</div>
+      <div class="output-box" id="output-menu">
+        <h3>Your Menu Description</h3>
+        <div class="output-text" id="text-menu"></div>
+        <button class="btn-copy" onclick="copyText('text-menu', this)">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== WEEKLY POST ===== -->
+  <div id="panel-weekly" class="panel">
+    <div class="card">
+      <h2>📅 Weekly Order Announcement</h2>
+      <p class="desc">Tell your customers what's available this week — ready for WhatsApp or Instagram.</p>
+
+      <label>Available dishes this week</label>
+      <textarea id="w-dishes" rows="4" placeholder="Gomen Wat&#10;Atakilt Wat&#10;Misser Wat&#10;Add any others..."></textarea>
+
+      <label>Special notes (optional)</label>
+      <input type="text" id="w-notes" placeholder="e.g. Orders close Thursday, minimum 2 portions, delivery available" />
+
+      <label>Platform</label>
+      <div class="platform-toggle">
+        <button class="platform-btn active" id="p-whatsapp"  onclick="setPlatform('whatsapp')">WhatsApp</button>
+        <button class="platform-btn"        id="p-instagram" onclick="setPlatform('instagram')">Instagram</button>
+        <button class="platform-btn"        id="p-both"      onclick="setPlatform('both')">Both</button>
+      </div>
+
+      <div class="tip">WhatsApp = warm & personal. Instagram = emojis & hashtags. Both = two versions at once.</div>
+
+      <button class="btn-generate" onclick="generate('weekly')">✦ Generate Announcement</button>
+      <div class="loading" id="loading-weekly"><span class="spinner"></span> Writing your announcement...</div>
+      <div class="output-box" id="output-weekly">
+        <h3>Your Weekly Announcement</h3>
+        <div class="output-text" id="text-weekly"></div>
+        <button class="btn-copy" onclick="copyText('text-weekly', this)">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DAILY SPECIAL ===== -->
+  <div id="panel-special" class="panel">
+    <div class="card">
+      <h2>✨ Daily Special Caption</h2>
+      <p class="desc">One dish, one click — copy and send instantly on WhatsApp or Instagram.</p>
+
+      <label>Today's Special</label>
+      <input type="text" id="s-dish" placeholder="e.g. Misser Wat" />
+
+      <label>Quick pick:</label>
+      <div class="quick-dishes">
+        <span class="dish-tag green"  onclick="document.getElementById('s-dish').value='Gomen Wat'">🟢 Gomen Wat</span>
+        <span class="dish-tag yellow" onclick="document.getElementById('s-dish').value='Atakilt Wat'">🟡 Atakilt Wat</span>
+        <span class="dish-tag red"    onclick="document.getElementById('s-dish').value='Misser Wat'">🔴 Misser Wat</span>
+      </div>
+
+      <label>Extra detail (optional)</label>
+      <input type="text" id="s-detail" placeholder="e.g. freshly made today, last few portions, extra spicy" />
+
+      <label>Platform</label>
+      <div class="platform-toggle">
+        <button class="platform-btn active" id="sp-whatsapp"  onclick="setSpecialPlatform('whatsapp')">WhatsApp</button>
+        <button class="platform-btn"        id="sp-instagram" onclick="setSpecialPlatform('instagram')">Instagram</button>
+      </div>
+
+      <button class="btn-generate" onclick="generate('special')">✦ Generate Caption</button>
+      <div class="loading" id="loading-special"><span class="spinner"></span> Writing your caption...</div>
+      <div class="output-box" id="output-special">
+        <h3>Your Daily Special Caption</h3>
+        <div class="output-text" id="text-special"></div>
+        <button class="btn-copy" onclick="copyText('text-special', this)">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== IMAGE PROMPT ===== -->
+  <div id="panel-image" class="panel">
+    <div class="card">
+      <h2>🖼️ Food Image Prompt Generator</h2>
+      <p class="desc">Get a ready-to-use AI image prompt — paste it into Leonardo.ai or Ideogram.ai (both free) for stunning food photos.</p>
+
+      <label>Dish Name</label>
+      <input type="text" id="i-dish" placeholder="e.g. Gomen Wat" />
+
+      <label>Quick pick:</label>
+      <div class="quick-dishes">
+        <span class="dish-tag green"  onclick="fillDish('image','Gomen Wat','Collard greens, deep green color, clay pot')">🟢 Gomen Wat</span>
+        <span class="dish-tag yellow" onclick="fillDish('image','Atakilt Wat','Cabbage, potato, carrot, golden yellow turmeric')">🟡 Atakilt Wat</span>
+        <span class="dish-tag red"    onclick="fillDish('image','Misser Wat','Red lentils, berbere, deep red rich stew')">🔴 Misser Wat</span>
+      </div>
+
+      <label>Main Ingredients / Colors</label>
+      <input type="text" id="i-ingredients" placeholder="e.g. Collard greens, deep green, clay pot" />
+
+      <label>Photo Style</label>
+      <select id="i-style">
+        <option value="rustic Ethiopian clay pot, warm natural light, wooden table, injera visible">Rustic Ethiopian (Recommended)</option>
+        <option value="professional food photography, white plate, studio lighting, clean background">Professional Studio</option>
+        <option value="Instagram flat lay, top down view, colorful Ethiopian props, vibrant">Instagram Flat Lay</option>
+        <option value="cozy home kitchen, natural daylight, authentic homemade feel">Cozy & Authentic</option>
+      </select>
+
+      <button class="btn-generate" onclick="generate('image')">✦ Generate Image Prompt</button>
+      <div class="loading" id="loading-image"><span class="spinner"></span> Creating your prompt...</div>
+      <div class="output-box" id="output-image">
+        <h3>Your AI Image Prompt</h3>
+        <div class="output-text" id="text-image"></div>
+        <button class="btn-copy" onclick="copyText('text-image', this)">Copy Prompt</button>
+        <div class="tip" style="margin-top:12px">Paste at <strong>leonardo.ai</strong> or <strong>ideogram.ai</strong> — both are free to use.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCHEDULER / CALENDAR ===== -->
+  <div id="panel-calendar" class="panel">
+    <div class="card">
+      <h2>🗓️ Weekly Post Scheduler</h2>
+      <p class="desc">Plan your posts for the week. Click any day to add or edit a scheduled post.</p>
+
+      <div class="week-nav">
+        <button onclick="changeWeek(-1)">← Prev</button>
+        <span id="weekLabel"></span>
+        <button onclick="changeWeek(1)">Next →</button>
+      </div>
+
+      <div class="calendar-grid" id="calendarGrid">
+        <div class="cal-day-header">Mon</div>
+        <div class="cal-day-header">Tue</div>
+        <div class="cal-day-header">Wed</div>
+        <div class="cal-day-header">Thu</div>
+        <div class="cal-day-header">Fri</div>
+        <div class="cal-day-header">Sat</div>
+        <div class="cal-day-header">Sun</div>
+      </div>
+
+      <!-- Schedule Entry Form -->
+      <div class="schedule-form" id="scheduleForm">
+        <h4 id="formDateLabel">📅 Add post for —</h4>
+
+        <label>What are you posting?</label>
+        <select id="cal-type">
+          <option value="weekly">Weekly Order Announcement</option>
+          <option value="special">Daily Special</option>
+          <option value="menu">Menu Description</option>
+          <option value="custom">Custom Note</option>
+        </select>
+
+        <label>Platform</label>
+        <div class="platform-toggle">
+          <button class="platform-btn active" id="cal-p-whatsapp"  onclick="setCalPlatform('whatsapp')">WhatsApp</button>
+          <button class="platform-btn"        id="cal-p-instagram" onclick="setCalPlatform('instagram')">Instagram</button>
+          <button class="platform-btn"        id="cal-p-both"      onclick="setCalPlatform('both')">Both</button>
+        </div>
+
+        <label>Dishes / Notes</label>
+        <textarea id="cal-notes" rows="3" placeholder="List dishes or write your note..."></textarea>
+
+        <br>
+        <button class="btn-generate-cal" onclick="generateFromCal()">✦ Generate Content Now</button>
+        <button class="btn-small btn-save" onclick="saveCalEntry()">Save to Calendar</button>
+        <button class="btn-small btn-delete" onclick="deleteCalEntry()">Delete</button>
+      </div>
+
+      <!-- Generated output from calendar -->
+      <div class="output-box" id="output-calendar">
+        <h3>Generated Content</h3>
+        <div class="output-text" id="text-calendar"></div>
+        <button class="btn-copy" onclick="copyText('text-calendar', this)">Copy</button>
+      </div>
+      <div class="loading" id="loading-calendar"><span class="spinner"></span> Generating...</div>
+    </div>
+  </div>
+
+</div><!-- end container -->
+
+<!-- FOOTER -->
+<div class="footer-flag"></div>
+<footer>
+  <div class="powered">Private Tool — Built with ✦ <span class="brand">EmyJ Magic</span></div>
+  <div style="margin-top:6px"><a href="mailto:info@emyj888.com">info@emyj888.com</a></div>
+</footer>
+
+</div><!-- end mainApp -->
+
+<script>
+  // ---- ACCESS CODE ----
+  const ACCESS_CODE = 'SELAMBUNNA';
+
+  function checkAccess() {
+    const input = document.getElementById('accessInput').value.trim().toUpperCase();
+    if (input === ACCESS_CODE) {
+      localStorage.setItem('genets_access', 'granted');
+      document.getElementById('accessGate').style.display = 'none';
+      document.getElementById('mainApp').style.display = 'block';
+    } else {
+      document.getElementById('accessError').style.display = 'block';
+      document.getElementById('accessInput').value = '';
+    }
+  }
+
+  function initAccess() {
+    if (localStorage.getItem('genets_access') === 'granted') {
+      document.getElementById('accessGate').style.display = 'none';
+      document.getElementById('mainApp').style.display = 'block';
+    } else {
+      document.getElementById('accessGate').style.display = 'flex';
+      document.getElementById('mainApp').style.display = 'none';
+    }
+  }
+
+  // ---- STATE ----
+  let selectedPlatform        = 'whatsapp';
+  let selectedSpecialPlatform = 'whatsapp';
+  let selectedCalPlatform     = 'whatsapp';
+  let currentWeekOffset       = 0;
+  let selectedCalDate         = null;
+  let calendarData            = JSON.parse(localStorage.getItem('genets_calendar') || '{}');
+
+  // ---- INIT ----
+  window.onload = () => {
+    initAccess();
+    const saved = localStorage.getItem('genets_api_key');
+    if (saved) {
+      document.getElementById('apiKeyInput').value = saved;
+      document.getElementById('apiStatus').textContent = '✓ Key saved';
+    }
+    renderCalendar();
+  };
+
+  // ---- API ----
+  function saveKey() {
+    const key = document.getElementById('apiKeyInput').value.trim();
+    if (!key) return;
+    localStorage.setItem('genets_api_key', key);
+    document.getElementById('apiStatus').textContent = '✓ Key saved';
+  }
+
+  function getKey() {
+    return localStorage.getItem('genets_api_key') || document.getElementById('apiKeyInput').value.trim();
+  }
+
+  async function callClaude(prompt) {
+    const key = getKey();
+    if (!key) { alert('Please enter your Claude API key at the top.'); return null; }
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': key,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 700,
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        alert('API Error: ' + (err.error?.message || 'Unknown error'));
+        return null;
+      }
+      const data = await res.json();
+      return data.content[0].text;
+    } catch (e) {
+      alert('Connection error. Please check your API key and try again.');
+      return null;
+    }
+  }
+
+  // ---- TABS ----
+  function switchTab(tab) {
+    const names = ['menu','weekly','special','image','calendar'];
+    document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', names[i] === tab));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + tab).classList.add('active');
+    if (tab === 'calendar') renderCalendar();
+  }
+
+  // ---- PLATFORM TOGGLES ----
+  function setPlatform(p) {
+    selectedPlatform = p;
+    ['whatsapp','instagram','both'].forEach(x =>
+      document.getElementById('p-' + x).classList.toggle('active', x === p));
+  }
+
+  function setSpecialPlatform(p) {
+    selectedSpecialPlatform = p;
+    ['whatsapp','instagram'].forEach(x =>
+      document.getElementById('sp-' + x).classList.toggle('active', x === p));
+  }
+
+  function setCalPlatform(p) {
+    selectedCalPlatform = p;
+    ['whatsapp','instagram','both'].forEach(x =>
+      document.getElementById('cal-p-' + x).classList.toggle('active', x === p));
+  }
+
+  // ---- QUICK FILL ----
+  function fillDish(panel, name, ingredients, character) {
+    if (panel === 'menu') {
+      document.getElementById('m-dish').value = name;
+      document.getElementById('m-ingredients').value = ingredients;
+      if (character) document.getElementById('m-character').value = character;
+    } else if (panel === 'image') {
+      document.getElementById('i-dish').value = name;
+      document.getElementById('i-ingredients').value = ingredients;
+    }
+  }
+
+  // ---- COPY ----
+  function copyText(id, btn) {
+    navigator.clipboard.writeText(document.getElementById(id).innerText).then(() => {
+      const orig = btn.textContent;
+      btn.textContent = '✓ Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  // ---- GENERATE ----
+  async function generate(panel) {
+    if (!getKey()) { alert('Please enter your Claude API key first.'); return; }
+
+    let prompt = '';
+
+    if (panel === 'menu') {
+      const dish        = document.getElementById('m-dish').value.trim();
+      const ingredients = document.getElementById('m-ingredients').value.trim();
+      const character   = document.getElementById('m-character').value.trim();
+      const tone        = document.getElementById('m-tone').value;
+      if (!dish) { alert('Please enter a dish name.'); return; }
+      prompt = `You are a professional food writer specialising in Ethiopian vegetarian cuisine.
+Write a menu description for:
+- Dish: ${dish}
+- Ingredients: ${ingredients || 'traditional Ethiopian vegetarian ingredients'}
+- Character: ${character || 'delicious and authentic'}
+- Tone: ${tone}
+Write 2–3 sentences. Make it appetising, authentic, and evocative. No title, just the description.`;
+    }
+
+    else if (panel === 'weekly') {
+      const dishes = document.getElementById('w-dishes').value.trim();
+      const notes  = document.getElementById('w-notes').value.trim();
+      if (!dishes) { alert('Please list the dishes available this week.'); return; }
+      const pInstr = platformInstruction(selectedPlatform);
+      prompt = `You are helping Genet, an Ethiopian home cook in the UK, announce her weekly vegetarian meal orders.
+Available this week:\n${dishes}\n${notes ? 'Notes: ' + notes : ''}
+${pInstr}
+Warm, inviting, authentic Ethiopian vegetarian home cooking made fresh to order.`;
+    }
+
+    else if (panel === 'special') {
+      const dish   = document.getElementById('s-dish').value.trim();
+      const detail = document.getElementById('s-detail').value.trim();
+      if (!dish) { alert('Please enter today\'s special.'); return; }
+      const pNote = selectedSpecialPlatform === 'whatsapp'
+        ? 'WhatsApp: warm, personal, simple emojis, no hashtags.'
+        : 'Instagram: visual, exciting, emojis and 5 relevant hashtags.';
+      prompt = `Write a short enticing daily special for Genet's Ethiopian vegetarian food business.
+Today's special: ${dish}${detail ? '\nDetail: ' + detail : ''}
+${pNote}
+Keep it 3–5 lines, warm, appetising — make people want to order right now.`;
+    }
+
+    else if (panel === 'image') {
+      const dish        = document.getElementById('i-dish').value.trim();
+      const ingredients = document.getElementById('i-ingredients').value.trim();
+      const style       = document.getElementById('i-style').value;
+      if (!dish) { alert('Please enter a dish name.'); return; }
+      prompt = `Create a detailed AI image generation prompt for this Ethiopian vegetarian dish:
+Dish: ${dish}
+Ingredients/Colors: ${ingredients || 'traditional Ethiopian vegetarian dish'}
+Style: ${style}
+Write a single paragraph (50–80 words) describing the dish visually — colors, textures, plating, lighting, atmosphere. Specific enough for a stunning realistic food photo. Start directly with the visual description.`;
+    }
+
+    document.getElementById('loading-' + panel).classList.add('visible');
+    document.getElementById('output-' + panel).classList.remove('visible');
+
+    const result = await callClaude(prompt);
+
+    document.getElementById('loading-' + panel).classList.remove('visible');
+    if (result) {
+      document.getElementById('text-' + panel).textContent = result;
+      document.getElementById('output-' + panel).classList.add('visible');
+    }
+  }
+
+  function platformInstruction(p) {
+    if (p === 'whatsapp') return 'Write for WhatsApp: warm, personal, conversational, simple emojis, no hashtags.';
+    if (p === 'instagram') return 'Write for Instagram: engaging, visual, emojis and 5–8 hashtags like #EthiopianFood #VegetarianFood #HomeCooking #EthiopianVegetarian #FoodUK';
+    return 'Write TWO versions labelled clearly: first WhatsApp (warm, no hashtags), then Instagram (with hashtags).';
+  }
+
+  // ---- CALENDAR ----
+  function getWeekDates(offset) {
+    const now = new Date();
+    const day = now.getDay();
+    const monday = new Date(now);
+    monday.setDate(now.getDate() - (day === 0 ? 6 : day - 1) + offset * 7);
+    return Array.from({length: 7}, (_, i) => {
+      const d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      return d;
+    });
+  }
+
+  function dateKey(d) {
+    return d.toISOString().split('T')[0];
+  }
+
+  function renderCalendar() {
+    const dates = getWeekDates(currentWeekOffset);
+    const grid  = document.getElementById('calendarGrid');
+
+    // Remove old day cells (keep headers)
+    const headers = grid.querySelectorAll('.cal-day-header');
+    grid.innerHTML = '';
+    headers.forEach(h => grid.appendChild(h));
+
+    const start = dates[0];
+    const end   = dates[6];
+    document.getElementById('weekLabel').textContent =
+      start.toLocaleDateString('en-GB', {day:'numeric', month:'short'}) + ' – ' +
+      end.toLocaleDateString('en-GB', {day:'numeric', month:'short', year:'numeric'});
+
+    dates.forEach(date => {
+      const key  = dateKey(date);
+      const cell = document.createElement('div');
+      cell.className = 'cal-day' + (calendarData[key] ? ' has-post' : '');
+      cell.innerHTML = `<div class="cal-day-num">${date.getDate()}</div>`;
+      if (calendarData[key]) {
+        const preview = document.createElement('div');
+        preview.className = 'cal-post-preview';
+        preview.textContent = calendarData[key].notes || calendarData[key].type;
+        cell.appendChild(preview);
+      }
+      cell.onclick = () => openCalForm(date);
+      grid.appendChild(cell);
+    });
+  }
+
+  function changeWeek(dir) {
+    currentWeekOffset += dir;
+    renderCalendar();
+    document.getElementById('scheduleForm').classList.remove('visible');
+    document.getElementById('output-calendar').classList.remove('visible');
+  }
+
+  function openCalForm(date) {
+    selectedCalDate = date;
+    const key  = dateKey(date);
+    const entry = calendarData[key] || {};
+    const label = date.toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long'});
+    document.getElementById('formDateLabel').textContent = '📅 ' + label;
+    document.getElementById('cal-type').value  = entry.type  || 'weekly';
+    document.getElementById('cal-notes').value = entry.notes || '';
+    setCalPlatform(entry.platform || 'whatsapp');
+    document.getElementById('scheduleForm').classList.add('visible');
+    document.getElementById('output-calendar').classList.remove('visible');
+    document.getElementById('scheduleForm').scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+
+  function saveCalEntry() {
+    if (!selectedCalDate) return;
+    const key = dateKey(selectedCalDate);
+    calendarData[key] = {
+      type:     document.getElementById('cal-type').value,
+      platform: selectedCalPlatform,
+      notes:    document.getElementById('cal-notes').value.trim()
+    };
+    localStorage.setItem('genets_calendar', JSON.stringify(calendarData));
+    renderCalendar();
+    document.getElementById('scheduleForm').classList.remove('visible');
+  }
+
+  function deleteCalEntry() {
+    if (!selectedCalDate) return;
+    const key = dateKey(selectedCalDate);
+    delete calendarData[key];
+    localStorage.setItem('genets_calendar', JSON.stringify(calendarData));
+    renderCalendar();
+    document.getElementById('scheduleForm').classList.remove('visible');
+  }
+
+  async function generateFromCal() {
+    if (!getKey()) { alert('Please enter your Claude API key first.'); return; }
+    const type     = document.getElementById('cal-type').value;
+    const notes    = document.getElementById('cal-notes').value.trim();
+    const pInstr   = platformInstruction(selectedCalPlatform);
+    let prompt = '';
+
+    if (type === 'weekly') {
+      prompt = `You are helping Genet, an Ethiopian home cook in the UK, announce her weekly vegetarian meal orders.
+Available: ${notes || 'Gomen Wat, Atakilt Wat, Misser Wat'}
+${pInstr}
+Warm, inviting, authentic Ethiopian vegetarian home cooking made fresh to order.`;
+    } else if (type === 'special') {
+      prompt = `Write a short enticing daily special caption for Genet's Ethiopian vegetarian food.
+Special: ${notes || 'Today\'s special dish'}
+${pInstr}
+3–5 lines, warm, appetising.`;
+    } else if (type === 'menu') {
+      prompt = `Write a beautiful menu description for this Ethiopian vegetarian dish:
+${notes}
+2–3 sentences, warm and inviting tone. No title.`;
+    } else {
+      prompt = `Write a short, warm social media post for Genet's Ethiopian vegetarian food business.
+Context: ${notes}
+${pInstr}`;
+    }
+
+    document.getElementById('loading-calendar').classList.add('visible');
+    document.getElementById('output-calendar').classList.remove('visible');
+
+    const result = await callClaude(prompt);
+
+    document.getElementById('loading-calendar').classList.remove('visible');
+    if (result) {
+      document.getElementById('text-calendar').textContent = result;
+      document.getElementById('output-calendar').classList.add('visible');
+    }
+  }
+</script>
+</body>
+</html>
